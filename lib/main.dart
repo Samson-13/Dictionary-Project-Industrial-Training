@@ -1,8 +1,11 @@
+import 'package:dictonary/ui/home.dart';
+import 'package:dictonary/ui/new_word_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MaterialApp(
-    home: Main(),
+    home: HomePage(),
     debugShowCheckedModeBanner: false,
   ));
 }
@@ -19,11 +22,6 @@ class _MainState extends State<Main> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 20,
-        title: const Text('Dictionary'),
-        backgroundColor: Colors.red.shade400,
-      ),
     );
   }
 }
