@@ -6,16 +6,15 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import '../model/dictonary_model.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class TestPage extends StatefulWidget {
+  const TestPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<TestPage> createState() => _TestPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TestPageState extends State<TestPage> {
   List<TodoModel> todos = [];
-  final textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -112,32 +111,58 @@ class _HomePageState extends State<HomePage> {
         
       ),
       body: ListView.builder(
-        
         itemCount: todos.length,
         itemBuilder: (context, index) {
           var item = todos[index];
-          return Card(
-                  child: ListTile(
-                    title: Text(item.title),
-                    subtitle: Text(item.description ?? "Not available"),
-                    leading: item.image != null
-                        ? Image.network(item.image!, scale: 1.0,)
-                        : const Text('N/A'),
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return AddWord(todo: item);
-                      })).then((value) {
-                        if (value != null) {
-                          updateToFirestore(value);
-                        } else {
-                          // log("returned data from new TODO page :$value");
-                        }
-                      });
-                    },
-                    
-                  ),
-                );
+          return Dismissible(
+            key: UniqueKey(),
+            onDismissed: (direction) {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text(
+                          "Are you sure you want to delete the task?"),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              setState(() {});
+                            },
+                            child: const Text("No")),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              deleteFromFirestore(item);
+                            },
+                            child: const Text("Yes")),
+                      ],
+                    );
+                  });
+            },
+      child: Card(
+              child: ListTile(
+                title: Text(item.title),
+                subtitle: Text(item.description ?? "Not available"),
+                leading: item.image != null
+                    ? Image.network(item.image!, scale: 1.0,)
+                    : const Text('N/A'),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return AddWord(todo: item);
+                  })).then((value) {
+                    if (value != null) {
+                      updateToFirestore(value);
+                    } else {
+                      // log("returned data from new TODO page :$value");
+                    }
+                  });
+                },
+                
+              ),
+            ),
+          );
         },
       ),
     );     
