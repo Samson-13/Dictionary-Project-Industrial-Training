@@ -66,7 +66,7 @@ class _AddWordState extends State<AddWord> {
             )),
             Expanded(child: MaterialButton(
             onPressed: () async{
-              final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+              final XFile? image = await _picker.pickImage(source: ImageSource.gallery,);
               if(image != null){
                 uploadImage(image);
             }
@@ -77,8 +77,8 @@ class _AddWordState extends State<AddWord> {
                 SizedBox(
                   height: 15,
                 ),
-                Icon(Icons.browse_gallery, size: 35,),
-                Text('Camera'),
+                Icon(Icons.photo_album, size: 35,),
+                Text('Gallery'),
                 SizedBox(
                   height: 15,
                 )
@@ -88,11 +88,11 @@ class _AddWordState extends State<AddWord> {
         ],
       );
     });
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      uploadImage(image);
+    // final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    // if (image != null) {
+    //   uploadImage(image);
     
-    }
+    // }
   }
 
   void uploadImage(XFile file) async {
@@ -124,44 +124,26 @@ class _AddWordState extends State<AddWord> {
         centerTitle: true,
         backgroundColor: Colors.red.shade400,
         title: Text(widget.todo == null ? "Add a word" : "Update word"),
-        leading: GestureDetector(
-      onTap: () { /* Write listener code here */ },
-      child: Icon(
-        Icons.menu,  // add custom icons also
-      ),
-  ),
-  actions: <Widget>[
-    Padding(
-      padding: EdgeInsets.only(right: 20.0),
-      child: GestureDetector(
-        onTap: () {},
-        child: Icon(
-          Icons.search,
-          size: 26.0,
-        ),
-      )
-    ),
-    Padding(
-      padding: EdgeInsets.only(right: 20.0),
-      child: GestureDetector(
-        onTap: () {},
-        child: Icon(
-            Icons.more_vert
-        ),
-      )
-    ),
-  ],
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.delete),
+            tooltip: 'Show Snackbar',
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('This is a snackbar')));
+            },
+          ),]
       ),
       body: Padding(
         padding: const EdgeInsets.all(1.0),
         child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 50, horizontal: 8),
+          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
           child: Column(children: [
             if (imageUrl != null)
               Image.network(
                 imageUrl!,
                 height: 150,
-              // scale: 1.0,
+              scale: 1.0,
               )
             else
               SizedBox(
